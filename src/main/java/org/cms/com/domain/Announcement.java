@@ -30,4 +30,5 @@ public class Announcement {
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 }
+// Kevser: GitHub contribution denemesi
 
