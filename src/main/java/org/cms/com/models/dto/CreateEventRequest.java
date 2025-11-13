@@ -11,5 +11,5 @@ public class CreateEventRequest {
     private Long programId;
     private String eventTitle;
     private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalTime endTime;// endTime of the event
 }
