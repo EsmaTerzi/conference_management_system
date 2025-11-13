@@ -2,16 +2,14 @@ package org.cms.com.services;
 
 import org.cms.com.models.dto.ConferenceDto;
 import org.cms.com.models.dto.CreateConferenceRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
-// ConferenceService.java
 public interface ConferenceService {
     ConferenceDto create(CreateConferenceRequest request);
-    ConferenceDto update(Long id, CreateConferenceRequest request); // update de aynı DTO'yu kullanır
+    ConferenceDto update(Long id, CreateConferenceRequest request);
     void delete(Long id);
     ConferenceDto get(Long id);
-    List<ConferenceDto> listAll();
+    Page<ConferenceDto> listAll(Pageable pageable);
+    Page<ConferenceDto> getByOwnerId(Long ownerId, Pageable pageable);
 }
-
-
