@@ -31,4 +31,4 @@ public class Announcement {
     private Conference conference;
 }
 // Kevser: GitHub contribution denemesi
-
+// Kevser: GitHub contribution denemesi 2

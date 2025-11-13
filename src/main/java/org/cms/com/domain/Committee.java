@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Committee {
-
+//kevser
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "committee_id")
