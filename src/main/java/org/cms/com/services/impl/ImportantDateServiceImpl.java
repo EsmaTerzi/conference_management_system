@@ -76,7 +76,7 @@ public class ImportantDateServiceImpl implements ImportantDateService {
 
     @Override
     public Page<ImportantDateDto> getByConferenceId(Long conferenceId, Pageable pageable) {
-        return importantDateRepository.findByConferenceId(conferenceId, pageable)
+        return importantDateRepository.findByConference_Id(conferenceId, pageable)
                 .map(this::toDto);
     }
 

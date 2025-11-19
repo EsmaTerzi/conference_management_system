@@ -77,7 +77,7 @@ public class ProgramServiceImpl implements ProgramService {
 
     @Override
     public Page<ProgramDto> getByConferenceId(Long conferenceId, Pageable pageable) {
-        return programRepository.findByConferenceId(conferenceId, pageable)
+        return programRepository.findByConference_Id(conferenceId, pageable)
                 .map(this::toDto);
     }
 

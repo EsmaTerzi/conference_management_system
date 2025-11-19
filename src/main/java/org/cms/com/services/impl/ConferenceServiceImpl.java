@@ -68,7 +68,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public Page<ConferenceDto> getByOwnerId(Long ownerId, Pageable pageable) {
-        return conferenceRepository.findByOwnerId(ownerId, pageable)
+        return conferenceRepository.findByOwner_Id(ownerId, pageable)
                 .map(this::toDto);
     }
 

@@ -75,13 +75,13 @@ public class CommitteeServiceImpl implements CommitteeService {
 
     @Override
     public Page<CommitteeDto> getByConferenceId(Long conferenceId, Pageable pageable) {
-        return committeeRepository.findByConferenceId(conferenceId, pageable)
+        return committeeRepository.findByConference_Id(conferenceId, pageable)
                 .map(this::toDto);
     }
 
     @Override
     public Page<CommitteeDto> getByConferenceIdAndType(Long conferenceId, String committeeType, Pageable pageable) {
-        return committeeRepository.findByConferenceIdAndCommitteeType(conferenceId, committeeType, pageable)
+        return committeeRepository.findByConference_IdAndCommitteeType(conferenceId, committeeType, pageable)
                 .map(this::toDto);
     }
 

@@ -75,7 +75,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Page<EventDto> getByProgramId(Long programId, Pageable pageable) {
-        return eventRepository.findByProgramId(programId, pageable)
+        return eventRepository.findByProgram_Id(programId, pageable)
                 .map(this::toDto);
     }
 

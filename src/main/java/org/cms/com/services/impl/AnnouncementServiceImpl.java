@@ -79,7 +79,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public Page<AnnouncementDto> getByConferenceId(Long conferenceId, Pageable pageable) {
-        return announcementRepository.findByConferenceId(conferenceId, pageable)
+        return announcementRepository.findByConference_Id(conferenceId, pageable)
                 .map(this::toDto);
     }
 

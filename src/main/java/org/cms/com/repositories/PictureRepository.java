@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PictureRepository extends JpaRepository<Picture, Long> {
-    Page<Picture> findByConferenceId(Long conferenceId, Pageable pageable);
+    Page<Picture> findByConference_Id(Long conferenceId, Pageable pageable);
 }
