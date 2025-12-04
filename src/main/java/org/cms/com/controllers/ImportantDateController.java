@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/important-dates")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class ImportantDateController {
 
     private final ImportantDateService importantDateService;
@@ -53,4 +54,3 @@ public class ImportantDateController {
         return ResponseEntity.ok(importantDates);
     }
 }
-

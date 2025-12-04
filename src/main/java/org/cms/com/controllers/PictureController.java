@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/pictures")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class PictureController {
 
     private final PictureService pictureService;
@@ -53,4 +54,3 @@ public class PictureController {
         return ResponseEntity.ok(pictures);
     }
 }
-

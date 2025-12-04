@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/committees")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class CommitteeController {
 
     private final CommitteeService committeeService;
@@ -62,4 +63,3 @@ public class CommitteeController {
         return ResponseEntity.ok(committees);
     }
 }
-

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/programs")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class ProgramController {
 
     private final ProgramService programService;
@@ -53,4 +54,3 @@ public class ProgramController {
         return ResponseEntity.ok(programs);
     }
 }
-

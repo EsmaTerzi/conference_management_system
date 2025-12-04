@@ -1,4 +1,3 @@
-
 package org.cms.com.controllers;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/conferences")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class ConferenceController {
 
     private final ConferenceService conferenceService;
@@ -54,4 +54,3 @@ public class ConferenceController {
         return ResponseEntity.ok(conferences);
     }
 }
-

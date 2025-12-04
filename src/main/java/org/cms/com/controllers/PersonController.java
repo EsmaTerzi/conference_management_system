@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/persons")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class PersonController {
 
     private final PersonService personService;
@@ -54,4 +55,3 @@ public class PersonController {
                 .orElse(ResponseEntity.notFound().build());
     }
 }
-

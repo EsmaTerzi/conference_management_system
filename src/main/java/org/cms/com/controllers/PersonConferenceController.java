@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/person-conferences")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class PersonConferenceController {
 
     private final PersonConferenceService personConferenceService;
@@ -59,4 +60,3 @@ public class PersonConferenceController {
         return ResponseEntity.ok(personConferences);
     }
 }
-

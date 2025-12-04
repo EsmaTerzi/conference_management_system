@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/announcements")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
@@ -53,4 +54,3 @@ public class AnnouncementController {
         return ResponseEntity.ok(announcements);
     }
 }
-
