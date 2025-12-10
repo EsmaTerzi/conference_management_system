@@ -1,0 +1,765 @@
+{
+	"info": {
+		"_postman_id": "cms-complete-api-collection",
+		"name": "Conference Management System - Complete API",
+		"description": "Conference Management System için tüm modüller ve endpoint'ler - 10 Modül, 80+ Endpoint",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "🔐 Authentication",
+			"item": [
+				{
+					"name": "Register (Kayıt Ol)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"personName\": \"Ahmet\",\n  \"personSurname\": \"Yılmaz\",\n  \"email\": \"ahmet@example.com\",\n  \"password\": \"password123\",\n  \"title\": \"Prof. Dr.\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"]},
+						"description": "Yeni kullanıcı kaydı oluşturur"
+					}
+				},
+				{
+					"name": "Login (Giriş Yap)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"ahmet@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"]},
+						"description": "Kullanıcı girişi yapar ve token döner"
+					}
+				}
+			]
+		},
+		{
+			"name": "👤 Person (Kişi)",
+			"item": [
+				{
+					"name": "Yeni Kişi Oluştur",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Ayşe\",\n  \"surname\": \"Demir\",\n  \"email\": \"ayse.demir@example.com\",\n  \"password\": \"secure123\",\n  \"title\": \"Doç. Dr.\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/persons", "host": ["{{baseUrl}}"], "path": ["api", "persons"]}
+					}
+				},
+				{
+					"name": "Tüm Kişileri Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/persons?page={{page}}&size={{size}}&sort=id,desc",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "persons"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"},
+								{"key": "sort", "value": "id,desc"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Kişi Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/persons/{{personId}}", "host": ["{{baseUrl}}"], "path": ["api", "persons", "{{personId}}"]}
+					}
+				},
+				{
+					"name": "E-posta ile Kişi Bul",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/persons/email/{{personEmail}}", "host": ["{{baseUrl}}"], "path": ["api", "persons", "email", "{{personEmail}}"]}
+					}
+				},
+				{
+					"name": "Kişi Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Ayşe\",\n  \"surname\": \"Demir Güncellendi\",\n  \"email\": \"ayse.demir@example.com\",\n  \"password\": \"newpassword\",\n  \"title\": \"Prof. Dr.\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/persons/{{personId}}", "host": ["{{baseUrl}}"], "path": ["api", "persons", "{{personId}}"]}
+					}
+				},
+				{
+					"name": "Kişi Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/persons/{{personId}}", "host": ["{{baseUrl}}"], "path": ["api", "persons", "{{personId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "🎤 Conference (Konferans)",
+			"item": [
+				{
+					"name": "Yeni Konferans Oluştur",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceName\": \"Uluslararası Yapay Zeka Konferansı 2024\",\n  \"startDate\": \"2024-09-15\",\n  \"endDate\": \"2024-09-17\",\n  \"description\": \"Yapay zeka alanında son gelişmeleri tartışacağız\",\n  \"location\": \"İstanbul, Türkiye\",\n  \"logoPath\": \"/images/ai-conference-logo.png\",\n  \"coverPath\": \"/images/ai-conference-cover.jpg\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/conferences", "host": ["{{baseUrl}}"], "path": ["api", "conferences"]}
+					}
+				},
+				{
+					"name": "Tüm Konferansları Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/conferences?page={{page}}&size={{size}}&sort=startDate,desc",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "conferences"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"},
+								{"key": "sort", "value": "startDate,desc"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Konferans Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/conferences/{{conferenceId}}", "host": ["{{baseUrl}}"], "path": ["api", "conferences", "{{conferenceId}}"]}
+					}
+				},
+				{
+					"name": "Sahip ID'sine Göre Konferanslar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/conferences/owner/{{ownerId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "conferences", "owner", "{{ownerId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Konferans Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceName\": \"Uluslararası Yapay Zeka Konferansı 2024 - Güncellendi\",\n  \"startDate\": \"2024-09-16\",\n  \"endDate\": \"2024-09-18\",\n  \"description\": \"Güncellenmiş açıklama\",\n  \"location\": \"Ankara, Türkiye\",\n  \"logoPath\": \"/images/new-logo.png\",\n  \"coverPath\": \"/images/new-cover.jpg\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/conferences/{{conferenceId}}", "host": ["{{baseUrl}}"], "path": ["api", "conferences", "{{conferenceId}}"]}
+					}
+				},
+				{
+					"name": "Konferans Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/conferences/{{conferenceId}}", "host": ["{{baseUrl}}"], "path": ["api", "conferences", "{{conferenceId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "📢 Announcement (Duyuru)",
+			"item": [
+				{
+					"name": "Yeni Duyuru Oluştur",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"announcementTitle\": \"Bildiri Gönderim Süresi Uzatıldı\",\n  \"announcementDate\": \"2024-08-01T10:00:00\",\n  \"announcementDesc\": \"Bildiri gönderim süresi 15 Ağustos'a kadar uzatılmıştır.\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/announcements", "host": ["{{baseUrl}}"], "path": ["api", "announcements"]}
+					}
+				},
+				{
+					"name": "Tüm Duyuruları Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/announcements?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "announcements"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Duyuru Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/announcements/{{announcementId}}", "host": ["{{baseUrl}}"], "path": ["api", "announcements", "{{announcementId}}"]}
+					}
+				},
+				{
+					"name": "Konferansa Göre Duyurular",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/announcements/conference/{{conferenceId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "announcements", "conference", "{{conferenceId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Duyuru Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"announcementTitle\": \"Bildiri Gönderim Süresi Tekrar Uzatıldı\",\n  \"announcementDate\": \"2024-08-05T14:00:00\",\n  \"announcementDesc\": \"Son tarih 20 Ağustos olarak güncellendi.\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/announcements/{{announcementId}}", "host": ["{{baseUrl}}"], "path": ["api", "announcements", "{{announcementId}}"]}
+					}
+				},
+				{
+					"name": "Duyuru Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/announcements/{{announcementId}}", "host": ["{{baseUrl}}"], "path": ["api", "announcements", "{{announcementId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "👥 Committee (Komite)",
+			"item": [
+				{
+					"name": "Yeni Komite Üyesi Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"committeeType\": \"BILIM\",\n  \"memberName\": \"Prof. Dr. Mehmet Kaya\",\n  \"affiliation\": \"İstanbul Üniversitesi\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/committees", "host": ["{{baseUrl}}"], "path": ["api", "committees"]}
+					}
+				},
+				{
+					"name": "Tüm Komite Üyelerini Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/committees?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "committees"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Komite Üyesi Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/committees/{{committeeId}}", "host": ["{{baseUrl}}"], "path": ["api", "committees", "{{committeeId}}"]}
+					}
+				},
+				{
+					"name": "Konferansa Göre Komite Üyeleri",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/committees/conference/{{conferenceId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "committees", "conference", "{{conferenceId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Konferans ve Tipe Göre Komite",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/committees/conference/{{conferenceId}}/type/{{committeeType}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "committees", "conference", "{{conferenceId}}", "type", "{{committeeType}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						},
+						"description": "committeeType: BILIM, DUZENLEME, ORGANIZASYON"
+					}
+				},
+				{
+					"name": "Komite Üyesi Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"committeeType\": \"DUZENLEME\",\n  \"memberName\": \"Prof. Dr. Mehmet Kaya\",\n  \"affiliation\": \"Boğaziçi Üniversitesi\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/committees/{{committeeId}}", "host": ["{{baseUrl}}"], "path": ["api", "committees", "{{committeeId}}"]}
+					}
+				},
+				{
+					"name": "Komite Üyesi Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/committees/{{committeeId}}", "host": ["{{baseUrl}}"], "path": ["api", "committees", "{{committeeId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "📅 Important Date (Önemli Tarih)",
+			"item": [
+				{
+					"name": "Yeni Önemli Tarih Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"impTitle\": \"Bildiri Son Gönderim Tarihi\",\n  \"impDate\": \"2024-08-15\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/important-dates", "host": ["{{baseUrl}}"], "path": ["api", "important-dates"]}
+					}
+				},
+				{
+					"name": "Tüm Önemli Tarihleri Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/important-dates?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "important-dates"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Önemli Tarih Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/important-dates/{{importantDateId}}", "host": ["{{baseUrl}}"], "path": ["api", "important-dates", "{{importantDateId}}"]}
+					}
+				},
+				{
+					"name": "Konferansa Göre Önemli Tarihler",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/important-dates/conference/{{conferenceId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "important-dates", "conference", "{{conferenceId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Önemli Tarih Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"impTitle\": \"Bildiri Son Gönderim Tarihi (Uzatıldı)\",\n  \"impDate\": \"2024-08-20\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/important-dates/{{importantDateId}}", "host": ["{{baseUrl}}"], "path": ["api", "important-dates", "{{importantDateId}}"]}
+					}
+				},
+				{
+					"name": "Önemli Tarih Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/important-dates/{{importantDateId}}", "host": ["{{baseUrl}}"], "path": ["api", "important-dates", "{{importantDateId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "📋 Program",
+			"item": [
+				{
+					"name": "Yeni Program Oluştur",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"dayTabs\": \"Gün 1 - 15 Eylül 2024\",\n  \"timeIntervals\": \"09:00-10:30\",\n  \"sessionTitle\": \"Açılış Oturumu\",\n  \"subtopics\": \"Hoş Geldiniz Konuşması, Konferans Tanıtımı\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/programs", "host": ["{{baseUrl}}"], "path": ["api", "programs"]}
+					}
+				},
+				{
+					"name": "Tüm Programları Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/programs?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "programs"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Program Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/programs/{{programId}}", "host": ["{{baseUrl}}"], "path": ["api", "programs", "{{programId}}"]}
+					}
+				},
+				{
+					"name": "Konferansa Göre Programlar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/programs/conference/{{conferenceId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "programs", "conference", "{{conferenceId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Program Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"dayTabs\": \"Gün 1 - 15 Eylül 2024\",\n  \"timeIntervals\": \"09:00-11:00\",\n  \"sessionTitle\": \"Açılış Oturumu - Genişletilmiş\",\n  \"subtopics\": \"Hoş Geldiniz, Konferans Tanıtımı, Keynote Konuşma\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/programs/{{programId}}", "host": ["{{baseUrl}}"], "path": ["api", "programs", "{{programId}}"]}
+					}
+				},
+				{
+					"name": "Program Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/programs/{{programId}}", "host": ["{{baseUrl}}"], "path": ["api", "programs", "{{programId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "🎯 Event (Etkinlik)",
+			"item": [
+				{
+					"name": "Yeni Etkinlik Oluştur",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"programId\": {{programId}},\n  \"eventTitle\": \"Yapay Zeka ve Etik Paneli\",\n  \"startTime\": \"14:00:00\",\n  \"endTime\": \"15:30:00\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/events", "host": ["{{baseUrl}}"], "path": ["api", "events"]}
+					}
+				},
+				{
+					"name": "Tüm Etkinlikleri Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/events?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "events"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Etkinlik Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/events/{{eventId}}", "host": ["{{baseUrl}}"], "path": ["api", "events", "{{eventId}}"]}
+					}
+				},
+				{
+					"name": "Programa Göre Etkinlikler",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/events/program/{{programId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "events", "program", "{{programId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Etkinlik Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"programId\": {{programId}},\n  \"eventTitle\": \"Yapay Zeka ve Etik Paneli - Genişletilmiş\",\n  \"startTime\": \"14:00:00\",\n  \"endTime\": \"16:00:00\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/events/{{eventId}}", "host": ["{{baseUrl}}"], "path": ["api", "events", "{{eventId}}"]}
+					}
+				},
+				{
+					"name": "Etkinlik Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/events/{{eventId}}", "host": ["{{baseUrl}}"], "path": ["api", "events", "{{eventId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "🖼️ Picture (Resim)",
+			"item": [
+				{
+					"name": "Yeni Resim Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"filePath\": \"/uploads/conference-hall.jpg\",\n  \"caption\": \"Konferans Salonu\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/pictures", "host": ["{{baseUrl}}"], "path": ["api", "pictures"]}
+					}
+				},
+				{
+					"name": "Tüm Resimleri Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/pictures?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pictures"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre Resim Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/pictures/{{pictureId}}", "host": ["{{baseUrl}}"], "path": ["api", "pictures", "{{pictureId}}"]}
+					}
+				},
+				{
+					"name": "Konferansa Göre Resimler",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/pictures/conference/{{conferenceId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pictures", "conference", "{{conferenceId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Resim Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"filePath\": \"/uploads/new-conference-hall.jpg\",\n  \"caption\": \"Yeni Konferans Salonu\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/pictures/{{pictureId}}", "host": ["{{baseUrl}}"], "path": ["api", "pictures", "{{pictureId}}"]}
+					}
+				},
+				{
+					"name": "Resim Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/pictures/{{pictureId}}", "host": ["{{baseUrl}}"], "path": ["api", "pictures", "{{pictureId}}"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔗 Person-Conference (Kişi-Konferans İlişkisi)",
+			"item": [
+				{
+					"name": "Kişiyi Konferansa Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"personId\": {{personId}},\n  \"committee\": \"BILIM\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/person-conferences", "host": ["{{baseUrl}}"], "path": ["api", "person-conferences"]}
+					}
+				},
+				{
+					"name": "Tüm İlişkileri Listele",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/person-conferences?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "person-conferences"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "ID'ye Göre İlişki Getir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/person-conferences/{{personConferenceId}}", "host": ["{{baseUrl}}"], "path": ["api", "person-conferences", "{{personConferenceId}}"]}
+					}
+				},
+				{
+					"name": "Konferansa Göre İlişkiler",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/person-conferences/conference/{{conferenceId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "person-conferences", "conference", "{{conferenceId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Kişiye Göre İlişkiler",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/person-conferences/person/{{personId}}?page={{page}}&size={{size}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "person-conferences", "person", "{{personId}}"],
+							"query": [
+								{"key": "page", "value": "{{page}}"},
+								{"key": "size", "value": "{{size}}"}
+							]
+						}
+					}
+				},
+				{
+					"name": "İlişki Güncelle",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conferenceId\": {{conferenceId}},\n  \"personId\": {{personId}},\n  \"committee\": \"DUZENLEME\"\n}"
+						},
+						"url": {"raw": "{{baseUrl}}/api/person-conferences/{{personConferenceId}}", "host": ["{{baseUrl}}"], "path": ["api", "person-conferences", "{{personConferenceId}}"]}
+					}
+				},
+				{
+					"name": "İlişki Sil",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/api/person-conferences/{{personConferenceId}}", "host": ["{{baseUrl}}"], "path": ["api", "person-conferences", "{{personConferenceId}}"]}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{"key": "baseUrl", "value": "http://localhost:8080"}
+	]
+}
+
