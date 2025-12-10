@@ -54,7 +54,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Auth endpoint'leri herkese açık
+                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // Sadece register ve login herkese açık
+                .requestMatchers("/api/auth/profile/**").authenticated() // Profile ve password authentication gerektirir
                 .anyRequest().authenticated() // Diğer tüm endpoint'ler authentication gerektirir
             )
             .sessionManagement(session -> session
@@ -72,11 +73,46 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+
+        // Frontend origin'leri - Development ve Production
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173"   // Vite (React/Vue)
+            // Production için: "https://yourdomain.com"
+        ));
+
+        // İzin verilen HTTP metodları
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH",
+            "OPTIONS",
+            "HEAD"
+        ));
+
+        // İzin verilen header'lar
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers",
+            "X-Requested-With"
+        ));
+
+        // Frontend'e dönecek header'lar
+        configuration.setExposedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "Content-Disposition"
+        ));
+
+        // Cookie ve Authorization header gönderimine izin ver
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+
+        // Preflight cache süresi (1 saat)
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

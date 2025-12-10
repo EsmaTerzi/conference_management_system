@@ -5,6 +5,9 @@ import org.cms.com.domain.Person;
 import org.cms.com.models.dto.AuthResponse;
 import org.cms.com.models.dto.LoginRequest;
 import org.cms.com.models.dto.RegisterRequest;
+import org.cms.com.models.dto.ProfileResponse;
+import org.cms.com.models.dto.UpdatePasswordRequest;
+import org.cms.com.models.dto.UpdateProfileRequest;
 import org.cms.com.repositories.PersonRepository;
 import org.cms.com.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -78,5 +81,58 @@ public class AuthService {
 
         return response;
     }
-}
 
+    public ProfileResponse getProfile(String email) {
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return ProfileResponse.builder()
+                .id(person.getId())
+                .name(person.getName())
+                .surname(person.getSurname())
+                .email(person.getEmail())
+                .title(person.getTitle())
+                .build();
+    }
+
+    public void updatePassword(String email, UpdatePasswordRequest request) {
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Mevcut şifreyi kontrol et
+        if (!passwordEncoder.matches(request.getCurrentPassword(), person.getPasswordHash())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        // Yeni şifreyi encode et ve kaydet
+        person.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        personRepository.save(person);
+    }
+
+    public ProfileResponse updateProfile(String email, UpdateProfileRequest request) {
+        Person person = personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Profil bilgilerini güncelle
+        if (request.getName() != null && !request.getName().isEmpty()) {
+            person.setName(request.getName());
+        }
+        if (request.getSurname() != null && !request.getSurname().isEmpty()) {
+            person.setSurname(request.getSurname());
+        }
+        if (request.getTitle() != null && !request.getTitle().isEmpty()) {
+            person.setTitle(request.getTitle());
+        }
+
+        Person updatedPerson = personRepository.save(person);
+
+        return ProfileResponse.builder()
+                .id(updatedPerson.getId())
+                .name(updatedPerson.getName())
+                .surname(updatedPerson.getSurname())
+                .email(updatedPerson.getEmail())
+                .title(updatedPerson.getTitle())
+                .build();
+    }
+
+}

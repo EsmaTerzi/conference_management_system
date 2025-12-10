@@ -4,9 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.cms.com.models.dto.AuthResponse;
 import org.cms.com.models.dto.LoginRequest;
 import org.cms.com.models.dto.RegisterRequest;
+import org.cms.com.models.dto.ProfileResponse;
+import org.cms.com.models.dto.UpdatePasswordRequest;
+import org.cms.com.models.dto.UpdateProfileRequest;
 import org.cms.com.services.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -41,6 +46,57 @@ public class AuthController {
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
+        try {
+            // JWT token'dan kullanıcı email'ini al
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+
+            ProfileResponse profile = authService.getProfile(email);
+            return ResponseEntity.ok(profile);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest request) {
+        try {
+            // JWT token'dan kullanıcı email'ini al
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+
+            ProfileResponse profile = authService.updateProfile(email, request);
+            return ResponseEntity.ok(profile);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request) {
+        try {
+            // JWT token'dan kullanıcı email'ini al
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+
+            authService.updatePassword(email, request);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Password updated successfully");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 }
