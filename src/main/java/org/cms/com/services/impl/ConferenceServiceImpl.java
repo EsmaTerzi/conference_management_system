@@ -19,13 +19,28 @@ public class ConferenceServiceImpl implements ConferenceService {
     @Override
     public ConferenceDto create(CreateConferenceRequest request) {
         Conference conference = new Conference();
-        conference.setName(request.getConferenceName());
+
+        // temel bilgiler
+        conference.setConferenceName(request.getConferenceName());
+        conference.setShortSubtitle(request.getShortSubtitle());
         conference.setDescription(request.getDescription());
         conference.setLocation(request.getLocation());
         conference.setStartDate(request.getStartDate());
         conference.setEndDate(request.getEndDate());
         conference.setLogoPath(request.getLogoPath());
         conference.setCoverPath(request.getCoverPath());
+
+        // footer bilgileri
+        conference.setFooterOrganizationTitle(request.getFooterOrganizationTitle());
+        conference.setFooterAddress(request.getFooterAddress());
+        conference.setFooterCityCountry(request.getFooterCityCountry());
+        conference.setFooterYearText(request.getFooterYearText());
+        conference.setFooterPhone(request.getFooterPhone());
+        conference.setFooterEmail(request.getFooterEmail());
+        conference.setFooterFacebookUrl(request.getFooterFacebookUrl());
+        conference.setFooterTwitterUrl(request.getFooterTwitterUrl());
+        conference.setFooterInstagramUrl(request.getFooterInstagramUrl());
+        conference.setFooterLinkedinUrl(request.getFooterLinkedinUrl());
 
         Conference saved = conferenceRepository.save(conference);
         return toDto(saved);
@@ -36,13 +51,27 @@ public class ConferenceServiceImpl implements ConferenceService {
         Conference conference = conferenceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conference not found"));
 
-        conference.setName(request.getConferenceName());
+        // temel bilgiler
+        conference.setConferenceName(request.getConferenceName());
+        conference.setShortSubtitle(request.getShortSubtitle());
         conference.setDescription(request.getDescription());
         conference.setLocation(request.getLocation());
         conference.setStartDate(request.getStartDate());
         conference.setEndDate(request.getEndDate());
         conference.setLogoPath(request.getLogoPath());
         conference.setCoverPath(request.getCoverPath());
+
+        // footer bilgileri
+        conference.setFooterOrganizationTitle(request.getFooterOrganizationTitle());
+        conference.setFooterAddress(request.getFooterAddress());
+        conference.setFooterCityCountry(request.getFooterCityCountry());
+        conference.setFooterYearText(request.getFooterYearText());
+        conference.setFooterPhone(request.getFooterPhone());
+        conference.setFooterEmail(request.getFooterEmail());
+        conference.setFooterFacebookUrl(request.getFooterFacebookUrl());
+        conference.setFooterTwitterUrl(request.getFooterTwitterUrl());
+        conference.setFooterInstagramUrl(request.getFooterInstagramUrl());
+        conference.setFooterLinkedinUrl(request.getFooterLinkedinUrl());
 
         Conference updated = conferenceRepository.save(conference);
         return toDto(updated);
@@ -75,14 +104,27 @@ public class ConferenceServiceImpl implements ConferenceService {
     private ConferenceDto toDto(Conference conference) {
         ConferenceDto dto = new ConferenceDto();
         dto.setId(conference.getId());
-        dto.setConferenceName(conference.getName());
+        dto.setConferenceName(conference.getConferenceName());
+        dto.setShortSubtitle(conference.getShortSubtitle());
         dto.setDescription(conference.getDescription());
         dto.setLocation(conference.getLocation());
         dto.setStartDate(conference.getStartDate());
         dto.setEndDate(conference.getEndDate());
         dto.setLogoPath(conference.getLogoPath());
         dto.setCoverPath(conference.getCoverPath());
+
+        // footer alanları
+        dto.setFooterOrganizationTitle(conference.getFooterOrganizationTitle());
+        dto.setFooterAddress(conference.getFooterAddress());
+        dto.setFooterCityCountry(conference.getFooterCityCountry());
+        dto.setFooterYearText(conference.getFooterYearText());
+        dto.setFooterPhone(conference.getFooterPhone());
+        dto.setFooterEmail(conference.getFooterEmail());
+        dto.setFooterFacebookUrl(conference.getFooterFacebookUrl());
+        dto.setFooterTwitterUrl(conference.getFooterTwitterUrl());
+        dto.setFooterInstagramUrl(conference.getFooterInstagramUrl());
+        dto.setFooterLinkedinUrl(conference.getFooterLinkedinUrl());
+
         return dto;
     }
 }
-
