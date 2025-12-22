@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface SponsorService {
     SponsorDto createSponsor(SponsorDto sponsorDto);
-    SponsorDto getSponsorById(Long id);
     List<SponsorDto> getAllSponsors();
+    SponsorDto getSponsorById(Long id);
     SponsorDto updateSponsor(Long id, SponsorDto sponsorDto);
     void deleteSponsor(Long id);
 }

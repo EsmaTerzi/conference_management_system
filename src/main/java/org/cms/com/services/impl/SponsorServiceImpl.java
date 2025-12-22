@@ -6,7 +6,6 @@ import org.cms.com.models.dto.SponsorDto;
 import org.cms.com.repositories.SponsorRepository;
 import org.cms.com.services.SponsorService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,18 +22,20 @@ public class SponsorServiceImpl implements SponsorService {
         sponsor.setType(sponsorDto.getType());
         sponsor.setLogoUrl(sponsorDto.getLogoUrl());
         Sponsor savedSponsor = sponsorRepository.save(sponsor);
-        return mapToDto(savedSponsor);
+        return new SponsorDto(savedSponsor.getId(), savedSponsor.getName(), savedSponsor.getType(), savedSponsor.getLogoUrl());
+    }
+
+    @Override
+    public List<SponsorDto> getAllSponsors() {
+        return sponsorRepository.findAll().stream()
+                .map(sponsor -> new SponsorDto(sponsor.getId(), sponsor.getName(), sponsor.getType(), sponsor.getLogoUrl()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public SponsorDto getSponsorById(Long id) {
         Sponsor sponsor = sponsorRepository.findById(id).orElseThrow(() -> new RuntimeException("Sponsor not found"));
-        return mapToDto(sponsor);
-    }
-
-    @Override
-    public List<SponsorDto> getAllSponsors() {
-        return sponsorRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
+        return new SponsorDto(sponsor.getId(), sponsor.getName(), sponsor.getType(), sponsor.getLogoUrl());
     }
 
     @Override
@@ -44,15 +45,11 @@ public class SponsorServiceImpl implements SponsorService {
         sponsor.setType(sponsorDto.getType());
         sponsor.setLogoUrl(sponsorDto.getLogoUrl());
         Sponsor updatedSponsor = sponsorRepository.save(sponsor);
-        return mapToDto(updatedSponsor);
+        return new SponsorDto(updatedSponsor.getId(), updatedSponsor.getName(), updatedSponsor.getType(), updatedSponsor.getLogoUrl());
     }
 
     @Override
     public void deleteSponsor(Long id) {
         sponsorRepository.deleteById(id);
-    }
-
-    private SponsorDto mapToDto(Sponsor sponsor) {
-        return new SponsorDto(sponsor.getId(), sponsor.getName(), sponsor.getType(), sponsor.getLogoUrl());
     }
 }
