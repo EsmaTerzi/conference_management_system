@@ -6,15 +6,14 @@ import org.cms.com.domain.Person;
 import org.cms.com.domain.PersonConference;
 import org.cms.com.models.dto.ConferenceDto;
 import org.cms.com.models.dto.CreateConferenceRequest;
-import org.cms.com.repositories.ConferenceRepository;
-import org.cms.com.repositories.PersonRepository;
-import org.cms.com.repositories.PersonConferenceRepository;
+import org.cms.com.repositories.*;
 import org.cms.com.services.ConferenceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +22,12 @@ public class ConferenceServiceImpl implements ConferenceService {
     private final ConferenceRepository conferenceRepository;
     private final PersonRepository personRepository;
     private final PersonConferenceRepository personConferenceRepository;
+    private final ProgramRepository programRepository;
+    private final EventRepository eventRepository;
+    private final AnnouncementRepository announcementRepository;
+    private final CommitteeRepository committeeRepository;
+    private final PictureRepository pictureRepository;
+    private final ImportantDateRepository importantDateRepository;
 
     @Override
     public ConferenceDto create(CreateConferenceRequest request) {
@@ -63,7 +68,7 @@ public class ConferenceServiceImpl implements ConferenceService {
         PersonConference personConference = new PersonConference();
         personConference.setConference(saved);
         personConference.setPerson(owner);
-        personConference.setCommittee("Owner"); // veya "Konferans Sahibi", "Organizatör" gibi
+        personConference.setCommittee("Konferans Sahibi");
         personConferenceRepository.save(personConference);
 
         return toDto(saved);
@@ -73,6 +78,16 @@ public class ConferenceServiceImpl implements ConferenceService {
     public ConferenceDto update(Long id, CreateConferenceRequest request) {
         Conference conference = conferenceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conference not found"));
+
+        // Güvenlik kontrolü: Sadece konferans sahibi güncelleyebilir
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Person currentUser = personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        if (conference.getOwner() == null || !conference.getOwner().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You are not authorized to update this conference");
+        }
 
         // temel bilgiler
         conference.setConferenceName(request.getConferenceName());
@@ -96,12 +111,64 @@ public class ConferenceServiceImpl implements ConferenceService {
         conference.setFooterInstagramUrl(request.getFooterInstagramUrl());
         conference.setFooterLinkedinUrl(request.getFooterLinkedinUrl());
 
+        // NOT: Owner değiştirilmez - güvenlik için
+
         Conference updated = conferenceRepository.save(conference);
         return toDto(updated);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
+        // Konferans var mı kontrol et
+        Conference conference = conferenceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Conference not found"));
+
+        // Güvenlik kontrolü: Sadece konferans sahibi silebilir
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Person currentUser = personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        if (conference.getOwner() == null || !conference.getOwner().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You are not authorized to delete this conference");
+        }
+
+        // 1. Event'leri sil (Program'lara bağlı)
+        programRepository.findByConference_Id(id, Pageable.unpaged())
+                .forEach(program -> eventRepository.deleteAll(
+                        eventRepository.findByProgram_Id(program.getId(), Pageable.unpaged())
+                ));
+
+        // 2. Program'ları sil
+        programRepository.deleteAll(programRepository.findByConference_Id(id, Pageable.unpaged()));
+
+        // 3. PersonConference kayıtlarını sil
+        personConferenceRepository.deleteAll(
+                personConferenceRepository.findByConference_Id(id, Pageable.unpaged())
+        );
+
+        // 4. Announcement'ları sil
+        announcementRepository.deleteAll(
+                announcementRepository.findByConference_Id(id, Pageable.unpaged())
+        );
+
+        // 5. Committee'leri sil
+        committeeRepository.deleteAll(
+                committeeRepository.findByConference_Id(id, Pageable.unpaged())
+        );
+
+        // 6. Picture'ları sil
+        pictureRepository.deleteAll(
+                pictureRepository.findByConference_Id(id, Pageable.unpaged())
+        );
+
+        // 7. ImportantDate'leri sil
+        importantDateRepository.deleteAll(
+                importantDateRepository.findByConference_Id(id, Pageable.unpaged())
+        );
+
+        // 8. Son olarak Conference'ı sil
         conferenceRepository.deleteById(id);
     }
 
