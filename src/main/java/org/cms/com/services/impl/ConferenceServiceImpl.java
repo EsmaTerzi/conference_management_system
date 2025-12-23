@@ -2,12 +2,18 @@ package org.cms.com.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.cms.com.domain.Conference;
+import org.cms.com.domain.Person;
+import org.cms.com.domain.PersonConference;
 import org.cms.com.models.dto.ConferenceDto;
 import org.cms.com.models.dto.CreateConferenceRequest;
 import org.cms.com.repositories.ConferenceRepository;
+import org.cms.com.repositories.PersonRepository;
+import org.cms.com.repositories.PersonConferenceRepository;
 import org.cms.com.services.ConferenceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,10 +21,19 @@ import org.springframework.stereotype.Service;
 public class ConferenceServiceImpl implements ConferenceService {
 
     private final ConferenceRepository conferenceRepository;
+    private final PersonRepository personRepository;
+    private final PersonConferenceRepository personConferenceRepository;
 
     @Override
     public ConferenceDto create(CreateConferenceRequest request) {
         Conference conference = new Conference();
+
+        // Oturum açmış kullanıcıyı owner olarak ata
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Person owner = personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+        conference.setOwner(owner);
 
         // temel bilgiler
         conference.setConferenceName(request.getConferenceName());
@@ -43,6 +58,14 @@ public class ConferenceServiceImpl implements ConferenceService {
         conference.setFooterLinkedinUrl(request.getFooterLinkedinUrl());
 
         Conference saved = conferenceRepository.save(conference);
+
+        // Konferans sahibini otomatik olarak PersonConference tablosuna ekle
+        PersonConference personConference = new PersonConference();
+        personConference.setConference(saved);
+        personConference.setPerson(owner);
+        personConference.setCommittee("Owner"); // veya "Konferans Sahibi", "Organizatör" gibi
+        personConferenceRepository.save(personConference);
+
         return toDto(saved);
     }
 
@@ -112,6 +135,13 @@ public class ConferenceServiceImpl implements ConferenceService {
         dto.setEndDate(conference.getEndDate());
         dto.setLogoPath(conference.getLogoPath());
         dto.setCoverPath(conference.getCoverPath());
+
+        // owner bilgileri
+        if (conference.getOwner() != null) {
+            dto.setOwnerId(conference.getOwner().getId());
+            dto.setOwnerEmail(conference.getOwner().getEmail());
+            dto.setOwnerName(conference.getOwner().getName() + " " + conference.getOwner().getSurname());
+        }
 
         // footer alanları
         dto.setFooterOrganizationTitle(conference.getFooterOrganizationTitle());

@@ -17,6 +17,12 @@ public class ConferenceDto {
     private String location;
     private String logoPath;
     private String coverPath;
+
+    // Owner bilgileri
+    private Long ownerId;
+    private String ownerEmail;
+    private String ownerName;
+
     private String footerOrganizationTitle;
     private String footerAddress;
     private String footerCityCountry;
