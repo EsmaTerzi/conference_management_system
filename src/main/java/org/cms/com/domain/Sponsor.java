@@ -20,4 +20,8 @@ public class Sponsor {
     private String type; // Financial, Educational, General
 
     private String logoUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conference_id")
+    private Conference conference;
 }

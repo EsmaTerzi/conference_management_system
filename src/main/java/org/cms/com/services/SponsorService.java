@@ -9,4 +9,5 @@ public interface SponsorService {
     SponsorDto getSponsorById(Long id);
     SponsorDto updateSponsor(Long id, SponsorDto sponsorDto);
     void deleteSponsor(Long id);
+    List<SponsorDto> getByConferenceId(Long conferenceId);
 }

@@ -12,4 +12,5 @@ public class SponsorDto {
     private String name;
     private String type; // Financial, Educational, General
     private String logoUrl;
+    private Long conferenceId;
 }

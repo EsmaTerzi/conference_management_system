@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/sponsors")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class SponsorController {
 
     private final SponsorService sponsorService;
@@ -31,6 +32,12 @@ public class SponsorController {
     public ResponseEntity<SponsorDto> getSponsorById(@PathVariable Long id) {
         SponsorDto sponsor = sponsorService.getSponsorById(id);
         return ResponseEntity.ok(sponsor);
+    }
+
+    @GetMapping("/conference/{conferenceId}")
+    public ResponseEntity<List<SponsorDto>> getSponsorsByConferenceId(@PathVariable Long conferenceId) {
+        List<SponsorDto> sponsors = sponsorService.getByConferenceId(conferenceId);
+        return ResponseEntity.ok(sponsors);
     }
 
     @PutMapping("/{id}")

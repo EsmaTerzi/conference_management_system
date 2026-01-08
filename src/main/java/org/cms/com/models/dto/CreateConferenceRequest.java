@@ -3,6 +3,7 @@ package org.cms.com.models.dto;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +27,8 @@ public class CreateConferenceRequest {
     private String footerTwitterUrl;
     private String footerInstagramUrl;
     private String footerLinkedinUrl;
+
+    // Sponsors
+    private List<SponsorDto> sponsors;
 }
 

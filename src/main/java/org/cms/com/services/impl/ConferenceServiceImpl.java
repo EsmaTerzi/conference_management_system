@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ConferenceServiceImpl implements ConferenceService {
@@ -28,6 +30,7 @@ public class ConferenceServiceImpl implements ConferenceService {
     private final CommitteeRepository committeeRepository;
     private final PictureRepository pictureRepository;
     private final ImportantDateRepository importantDateRepository;
+    private final SponsorRepository sponsorRepository;
 
     @Override
     public ConferenceDto create(CreateConferenceRequest request) {
@@ -71,6 +74,18 @@ public class ConferenceServiceImpl implements ConferenceService {
         personConference.setCommittee("Konferans Sahibi");
         personConferenceRepository.save(personConference);
 
+        // Sponsorları kaydet
+        if (request.getSponsors() != null && !request.getSponsors().isEmpty()) {
+            request.getSponsors().forEach(sponsorDto -> {
+                org.cms.com.domain.Sponsor sponsor = new org.cms.com.domain.Sponsor();
+                sponsor.setName(sponsorDto.getName());
+                sponsor.setType(sponsorDto.getType());
+                sponsor.setLogoUrl(sponsorDto.getLogoUrl());
+                sponsor.setConference(saved);
+                sponsorRepository.save(sponsor);
+            });
+        }
+
         return toDto(saved);
     }
 
@@ -89,27 +104,80 @@ public class ConferenceServiceImpl implements ConferenceService {
             throw new RuntimeException("You are not authorized to update this conference");
         }
 
-        // temel bilgiler
-        conference.setConferenceName(request.getConferenceName());
-        conference.setShortSubtitle(request.getShortSubtitle());
-        conference.setDescription(request.getDescription());
-        conference.setLocation(request.getLocation());
-        conference.setStartDate(request.getStartDate());
-        conference.setEndDate(request.getEndDate());
-        conference.setLogoPath(request.getLogoPath());
-        conference.setCoverPath(request.getCoverPath());
+        // temel bilgiler - sadece null olmayanları güncelle
+        if (request.getConferenceName() != null) {
+            conference.setConferenceName(request.getConferenceName());
+        }
+        if (request.getShortSubtitle() != null) {
+            conference.setShortSubtitle(request.getShortSubtitle());
+        }
+        if (request.getDescription() != null) {
+            conference.setDescription(request.getDescription());
+        }
+        if (request.getLocation() != null) {
+            conference.setLocation(request.getLocation());
+        }
+        if (request.getStartDate() != null) {
+            conference.setStartDate(request.getStartDate());
+        }
+        if (request.getEndDate() != null) {
+            conference.setEndDate(request.getEndDate());
+        }
+        if (request.getLogoPath() != null) {
+            conference.setLogoPath(request.getLogoPath());
+        }
+        if (request.getCoverPath() != null) {
+            conference.setCoverPath(request.getCoverPath());
+        }
 
-        // footer bilgileri
-        conference.setFooterOrganizationTitle(request.getFooterOrganizationTitle());
-        conference.setFooterAddress(request.getFooterAddress());
-        conference.setFooterCityCountry(request.getFooterCityCountry());
-        conference.setFooterYearText(request.getFooterYearText());
-        conference.setFooterPhone(request.getFooterPhone());
-        conference.setFooterEmail(request.getFooterEmail());
-        conference.setFooterFacebookUrl(request.getFooterFacebookUrl());
-        conference.setFooterTwitterUrl(request.getFooterTwitterUrl());
-        conference.setFooterInstagramUrl(request.getFooterInstagramUrl());
-        conference.setFooterLinkedinUrl(request.getFooterLinkedinUrl());
+        // footer bilgileri - sadece null olmayanları güncelle
+        if (request.getFooterOrganizationTitle() != null) {
+            conference.setFooterOrganizationTitle(request.getFooterOrganizationTitle());
+        }
+        if (request.getFooterAddress() != null) {
+            conference.setFooterAddress(request.getFooterAddress());
+        }
+        if (request.getFooterCityCountry() != null) {
+            conference.setFooterCityCountry(request.getFooterCityCountry());
+        }
+        if (request.getFooterYearText() != null) {
+            conference.setFooterYearText(request.getFooterYearText());
+        }
+        if (request.getFooterPhone() != null) {
+            conference.setFooterPhone(request.getFooterPhone());
+        }
+        if (request.getFooterEmail() != null) {
+            conference.setFooterEmail(request.getFooterEmail());
+        }
+        if (request.getFooterFacebookUrl() != null) {
+            conference.setFooterFacebookUrl(request.getFooterFacebookUrl());
+        }
+        if (request.getFooterTwitterUrl() != null) {
+            conference.setFooterTwitterUrl(request.getFooterTwitterUrl());
+        }
+        if (request.getFooterInstagramUrl() != null) {
+            conference.setFooterInstagramUrl(request.getFooterInstagramUrl());
+        }
+        if (request.getFooterLinkedinUrl() != null) {
+            conference.setFooterLinkedinUrl(request.getFooterLinkedinUrl());
+        }
+
+        // Sponsorları güncelle (eğer gönderildiyse)
+        if (request.getSponsors() != null) {
+            // Mevcut sponsorları sil
+            List<org.cms.com.domain.Sponsor> existingSponsors = sponsorRepository.findByConference_Id(id);
+            sponsorRepository.deleteAll(existingSponsors);
+
+            // Yeni sponsorları ekle
+            request.getSponsors().forEach(sponsorDto -> {
+                org.cms.com.domain.Sponsor sponsor = new org.cms.com.domain.Sponsor();
+                sponsor.setName(sponsorDto.getName());
+                sponsor.setType(sponsorDto.getType());
+                sponsor.setLogoUrl(sponsorDto.getLogoUrl());
+                sponsor.setConference(conference);
+                sponsorRepository.save(sponsor);
+            });
+        }
 
         // NOT: Owner değiştirilmez - güvenlik için
 
@@ -168,7 +236,12 @@ public class ConferenceServiceImpl implements ConferenceService {
                 importantDateRepository.findByConference_Id(id, Pageable.unpaged())
         );
 
-        // 8. Son olarak Conference'ı sil
+        // 8. Sponsor'ları sil
+        sponsorRepository.deleteAll(
+                sponsorRepository.findByConference_Id(id)
+        );
+
+        // 9. Son olarak Conference'ı sil
         conferenceRepository.deleteById(id);
     }
 
