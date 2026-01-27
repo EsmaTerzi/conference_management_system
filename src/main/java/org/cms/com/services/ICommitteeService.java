@@ -5,7 +5,7 @@ import org.cms.com.models.dto.CreateCommitteeRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface CommitteeService {
+public interface ICommitteeService {
     CommitteeDto create(CreateCommitteeRequest request);
     CommitteeDto update(Long id, CreateCommitteeRequest request);
     void delete(Long id);

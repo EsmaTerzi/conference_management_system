@@ -9,14 +9,14 @@ import org.cms.com.models.dto.PersonConferenceDto;
 import org.cms.com.repositories.ConferenceRepository;
 import org.cms.com.repositories.PersonConferenceRepository;
 import org.cms.com.repositories.PersonRepository;
-import org.cms.com.services.PersonConferenceService;
+import org.cms.com.services.IPersonConferenceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PersonConferenceServiceImpl implements PersonConferenceService {
+public class PersonConferenceServiceImpl implements IPersonConferenceService {
 
     private final PersonConferenceRepository personConferenceRepository;
     private final PersonRepository personRepository;

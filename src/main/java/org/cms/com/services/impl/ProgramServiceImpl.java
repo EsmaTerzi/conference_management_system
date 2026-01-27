@@ -7,14 +7,14 @@ import org.cms.com.models.dto.CreateProgramRequest;
 import org.cms.com.models.dto.ProgramDto;
 import org.cms.com.repositories.ConferenceRepository;
 import org.cms.com.repositories.ProgramRepository;
-import org.cms.com.services.ProgramService;
+import org.cms.com.services.IProgramService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ProgramServiceImpl implements ProgramService {
+public class ProgramServiceImpl implements IProgramService {
 
     private final ProgramRepository programRepository;
     private final ConferenceRepository conferenceRepository;

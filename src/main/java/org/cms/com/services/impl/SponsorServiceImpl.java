@@ -6,14 +6,14 @@ import org.cms.com.domain.Sponsor;
 import org.cms.com.models.dto.SponsorDto;
 import org.cms.com.repositories.ConferenceRepository;
 import org.cms.com.repositories.SponsorRepository;
-import org.cms.com.services.SponsorService;
+import org.cms.com.services.ISponsorService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SponsorServiceImpl implements SponsorService {
+public class SponsorServiceImpl implements ISponsorService {
 
     private final SponsorRepository sponsorRepository;
     private final ConferenceRepository conferenceRepository;

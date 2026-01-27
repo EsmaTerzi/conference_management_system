@@ -7,7 +7,7 @@ import org.cms.com.domain.PersonConference;
 import org.cms.com.models.dto.ConferenceDto;
 import org.cms.com.models.dto.CreateConferenceRequest;
 import org.cms.com.repositories.*;
-import org.cms.com.services.ConferenceService;
+import org.cms.com.services.IConferenceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -19,16 +19,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ConferenceServiceImpl implements ConferenceService {
+public class ConferenceServiceImpl implements IConferenceService {
 
     private final ConferenceRepository conferenceRepository;
     private final PersonRepository personRepository;
     private final PersonConferenceRepository personConferenceRepository;
     private final ProgramRepository programRepository;
-    private final EventRepository eventRepository;
     private final AnnouncementRepository announcementRepository;
     private final CommitteeRepository committeeRepository;
-    private final PictureRepository pictureRepository;
     private final ImportantDateRepository importantDateRepository;
     private final SponsorRepository sponsorRepository;
 
@@ -202,11 +200,6 @@ public class ConferenceServiceImpl implements ConferenceService {
             throw new RuntimeException("You are not authorized to delete this conference");
         }
 
-        // 1. Event'leri sil (Program'lara bağlı)
-        programRepository.findByConference_Id(id, Pageable.unpaged())
-                .forEach(program -> eventRepository.deleteAll(
-                        eventRepository.findByProgram_Id(program.getId(), Pageable.unpaged())
-                ));
 
         // 2. Program'ları sil
         programRepository.deleteAll(programRepository.findByConference_Id(id, Pageable.unpaged()));
@@ -224,11 +217,6 @@ public class ConferenceServiceImpl implements ConferenceService {
         // 5. Committee'leri sil
         committeeRepository.deleteAll(
                 committeeRepository.findByConference_Id(id, Pageable.unpaged())
-        );
-
-        // 6. Picture'ları sil
-        pictureRepository.deleteAll(
-                pictureRepository.findByConference_Id(id, Pageable.unpaged())
         );
 
         // 7. ImportantDate'leri sil

@@ -5,7 +5,7 @@ import org.cms.com.models.dto.CreateImportantDateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ImportantDateService {
+public interface IImportantDateService {
     ImportantDateDto create(CreateImportantDateRequest request);
     ImportantDateDto update(Long id, CreateImportantDateRequest request);
     void delete(Long id);

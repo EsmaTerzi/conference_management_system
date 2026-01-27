@@ -7,7 +7,7 @@ import org.cms.com.models.dto.RegisterRequest;
 import org.cms.com.models.dto.ProfileResponse;
 import org.cms.com.models.dto.UpdatePasswordRequest;
 import org.cms.com.models.dto.UpdateProfileRequest;
-import org.cms.com.services.AuthService;
+import org.cms.com.services.impl.AuthServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ import java.util.Map;
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"}, allowCredentials = "true")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -62,22 +62,6 @@ public class AuthController {
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
-    }
-
-    @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest request) {
-        try {
-            // JWT token'dan kullanıcı email'ini al
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-
-            ProfileResponse profile = authService.updateProfile(email, request);
-            return ResponseEntity.ok(profile);
-        } catch (RuntimeException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 

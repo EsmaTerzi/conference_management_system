@@ -5,7 +5,7 @@ import org.cms.com.models.dto.CreatePersonConferenceRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface PersonConferenceService {
+public interface IPersonConferenceService {
     PersonConferenceDto create(CreatePersonConferenceRequest request);
     PersonConferenceDto update(Long id, CreatePersonConferenceRequest request);
     void delete(Long id);

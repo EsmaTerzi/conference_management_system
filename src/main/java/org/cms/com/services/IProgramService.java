@@ -5,7 +5,7 @@ import org.cms.com.models.dto.CreateProgramRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ProgramService {
+public interface IProgramService {
     ProgramDto create(CreateProgramRequest request);
     ProgramDto update(Long id, CreateProgramRequest request);
     void delete(Long id);

@@ -5,7 +5,7 @@ import org.cms.com.models.dto.CreateConferenceRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ConferenceService {
+public interface IConferenceService {
     ConferenceDto create(CreateConferenceRequest request);
     ConferenceDto update(Long id, CreateConferenceRequest request);
     void delete(Long id);

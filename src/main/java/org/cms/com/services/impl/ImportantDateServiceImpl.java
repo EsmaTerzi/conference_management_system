@@ -7,7 +7,7 @@ import org.cms.com.models.dto.CreateImportantDateRequest;
 import org.cms.com.models.dto.ImportantDateDto;
 import org.cms.com.repositories.ConferenceRepository;
 import org.cms.com.repositories.ImportantDateRepository;
-import org.cms.com.services.ImportantDateService;
+import org.cms.com.services.IImportantDateService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class ImportantDateServiceImpl implements ImportantDateService {
+public class ImportantDateServiceImpl implements IImportantDateService {
 
     private final ImportantDateRepository importantDateRepository;
     private final ConferenceRepository conferenceRepository;

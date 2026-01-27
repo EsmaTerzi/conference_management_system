@@ -7,14 +7,14 @@ import org.cms.com.models.dto.CommitteeDto;
 import org.cms.com.models.dto.CreateCommitteeRequest;
 import org.cms.com.repositories.CommitteeRepository;
 import org.cms.com.repositories.ConferenceRepository;
-import org.cms.com.services.CommitteeService;
+import org.cms.com.services.ICommitteeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CommitteeServiceImpl implements CommitteeService {
+public class CommitteeServiceImpl implements ICommitteeService {
 
     private final CommitteeRepository committeeRepository;
     private final ConferenceRepository conferenceRepository;

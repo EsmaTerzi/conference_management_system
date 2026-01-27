@@ -7,7 +7,7 @@ import org.cms.com.models.dto.AnnouncementDto;
 import org.cms.com.models.dto.CreateAnnouncementRequest;
 import org.cms.com.repositories.AnnouncementRepository;
 import org.cms.com.repositories.ConferenceRepository;
-import org.cms.com.services.AnnouncementService;
+import org.cms.com.services.IAnnouncementService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class AnnouncementServiceImpl implements AnnouncementService {
+public class AnnouncementServiceImpl implements IAnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
     private final ConferenceRepository conferenceRepository;
