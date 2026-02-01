@@ -9,5 +9,4 @@ public interface IAuthService {
     public AuthResponse login(LoginRequest request);
     public ProfileResponse getProfile(String email);
     public void updatePassword(String email, UpdatePasswordRequest request);
-
 }

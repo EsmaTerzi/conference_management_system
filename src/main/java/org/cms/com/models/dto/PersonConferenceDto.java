@@ -12,6 +12,5 @@ public class PersonConferenceDto {
     private Long personId;
     private String personName;
     private String personSurname;
-    private String committee;
 }
 

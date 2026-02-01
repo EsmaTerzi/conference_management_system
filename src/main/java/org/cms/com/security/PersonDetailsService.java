@@ -3,6 +3,7 @@ package org.cms.com.security;
 import lombok.RequiredArgsConstructor;
 import org.cms.com.domain.Person;
 import org.cms.com.repositories.PersonRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class PersonDetailsService implements UserDetailsService {
 
@@ -25,4 +27,3 @@ public class PersonDetailsService implements UserDetailsService {
         return new User(person.getEmail(), person.getPasswordHash(), Collections.emptyList());
     }
 }
-

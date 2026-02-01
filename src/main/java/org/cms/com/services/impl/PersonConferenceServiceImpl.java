@@ -25,7 +25,7 @@ public class PersonConferenceServiceImpl implements IPersonConferenceService {
     @Override
     public PersonConferenceDto create(CreatePersonConferenceRequest request) {
         PersonConference personConference = new PersonConference();
-        personConference.setCommittee(request.getCommittee());
+
 
         if (request.getPersonId() != null) {
             Person person = personRepository.findById(request.getPersonId())
@@ -48,7 +48,7 @@ public class PersonConferenceServiceImpl implements IPersonConferenceService {
         PersonConference personConference = personConferenceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PersonConference not found"));
 
-        personConference.setCommittee(request.getCommittee());
+
 
         if (request.getPersonId() != null) {
             Person person = personRepository.findById(request.getPersonId())
@@ -99,7 +99,7 @@ public class PersonConferenceServiceImpl implements IPersonConferenceService {
     private PersonConferenceDto toDto(PersonConference personConference) {
         PersonConferenceDto dto = new PersonConferenceDto();
         dto.setId(personConference.getId());
-        dto.setCommittee(personConference.getCommittee());
+
 
         if (personConference.getConference() != null) {
             dto.setConferenceId(personConference.getConference().getId());

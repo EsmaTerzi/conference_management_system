@@ -2,12 +2,8 @@ package org.cms.com.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.cms.com.domain.Person;
-import org.cms.com.models.dto.AuthResponse;
-import org.cms.com.models.dto.LoginRequest;
-import org.cms.com.models.dto.RegisterRequest;
-import org.cms.com.models.dto.ProfileResponse;
-import org.cms.com.models.dto.UpdatePasswordRequest;
-import org.cms.com.models.dto.UpdateProfileRequest;
+import org.cms.com.models.dto.*;
+import org.cms.com.repositories.ParticipantRepository;
 import org.cms.com.repositories.PersonRepository;
 import org.cms.com.security.JwtService;
 import org.cms.com.services.IAuthService;
@@ -113,5 +109,4 @@ public class AuthServiceImpl implements IAuthService {
         person.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         personRepository.save(person);
     }
-
 }

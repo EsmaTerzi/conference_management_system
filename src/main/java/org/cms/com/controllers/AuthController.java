@@ -1,12 +1,13 @@
 package org.cms.com.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.cms.com.models.dto.AuthResponse;
 import org.cms.com.models.dto.LoginRequest;
 import org.cms.com.models.dto.RegisterRequest;
 import org.cms.com.models.dto.ProfileResponse;
 import org.cms.com.models.dto.UpdatePasswordRequest;
-import org.cms.com.models.dto.UpdateProfileRequest;
+
 import org.cms.com.services.impl.AuthServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthController {
     private final AuthServiceImpl authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest request) {
         try {
             AuthResponse response = authService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
         try {
             AuthResponse response = authService.login(request);
             return ResponseEntity.ok(response);

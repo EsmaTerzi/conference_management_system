@@ -69,7 +69,6 @@ public class ConferenceServiceImpl implements IConferenceService {
         PersonConference personConference = new PersonConference();
         personConference.setConference(saved);
         personConference.setPerson(owner);
-        personConference.setCommittee("Konferans Sahibi");
         personConferenceRepository.save(personConference);
 
         // Sponsorları kaydet

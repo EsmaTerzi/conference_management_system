@@ -24,7 +24,5 @@ public class PersonConference {
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
-    @Column(name = "committee", length = 100)
-    private String committee;   // "Bilim Kurulu" gibi
 }
 
