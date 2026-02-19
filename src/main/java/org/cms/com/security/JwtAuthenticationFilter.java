@@ -22,6 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final ParticipantDetailsService participantDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -42,7 +43,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            // Önce Person tablosunda ara, bulunamazsa Participant tablosunda ara
+            UserDetails userDetails = null;
+//            try {
+//                userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+//            } catch (Exception e) {
+                try {
+                    userDetails = this.participantDetailsService.loadUserByUsername(userEmail);
+                } catch (Exception ex) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

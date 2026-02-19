@@ -5,6 +5,7 @@ import org.cms.com.domain.Conference;
 import org.cms.com.domain.DocumentStatus;
 import org.cms.com.domain.Participant;
 import org.cms.com.models.dto.AuthResponse;
+import org.cms.com.models.dto.ParticipantLoginRequest;
 import org.cms.com.models.dto.ParticipantRegisterRequest;
 import org.cms.com.repositories.ConferenceRepository;
 import org.cms.com.repositories.ParticipantRepository;
@@ -64,6 +65,29 @@ public class AuthParticipateServiceImpl implements IAuthParticipantService {
         response.setToken(token);
         response.setPersonId(savedParticipant.getId());
         response.setFullName(savedParticipant.getName() + " " + savedParticipant.getSurname());
+
+        return response;
+    }
+    @Override
+    public AuthResponse loginParticipent(ParticipantLoginRequest request){
+        // Kullanıcıyı email ile bul
+        Participant participant = participantRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        // Şifre kontrolü
+        if (!passwordEncoder.matches(request.getPassword(), participant.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        // JWT token oluştur - ParticipantDetailsService kullan
+        UserDetails userDetails = participantDetailsService.loadUserByUsername(participant.getEmail());
+        String token = jwtService.generateToken(userDetails);
+
+        // Response oluştur
+        AuthResponse response = new AuthResponse();
+        response.setToken(token);
+        response.setPersonId(participant.getId());
+        response.setFullName(participant.getName() + " " + participant.getSurname());
 
         return response;
     }

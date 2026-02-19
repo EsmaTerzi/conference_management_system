@@ -3,6 +3,7 @@ package org.cms.com.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.cms.com.models.dto.AuthResponse;
+import org.cms.com.models.dto.ParticipantLoginRequest;
 import org.cms.com.models.dto.ParticipantRegisterRequest;
 import org.cms.com.models.dto.RegisterRequest;
 import org.cms.com.services.impl.AuthParticipateServiceImpl;
@@ -27,6 +28,17 @@ public class ParticipantAuthController {
         try {
             AuthResponse response = authParticipateService.registerParticipent(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid ParticipantLoginRequest request) {
+        try {
+            AuthResponse response = authParticipateService.loginParticipent(request);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
