@@ -45,15 +45,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // Önce Person tablosunda ara, bulunamazsa Participant tablosunda ara
             UserDetails userDetails = null;
-//            try {
-//                userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-//            } catch (Exception e) {
+            try {
+                userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            } catch (Exception e) {
                 try {
                     userDetails = this.participantDetailsService.loadUserByUsername(userEmail);
                 } catch (Exception ex) {
                     filterChain.doFilter(request, response);
                     return;
                 }
+            }
 
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
