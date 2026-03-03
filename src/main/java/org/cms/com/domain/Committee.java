@@ -28,5 +28,8 @@ public class Committee {
 
     @Column(name = "affiliation", length = 150)
     private String affiliation;     // hangi kuruma bağlı
-}//mail gelmeli 
+
+    @Column(name = "email", length = 150)
+    private String email;           // iletişim için mail adresi
+}//mail gelmeli
 

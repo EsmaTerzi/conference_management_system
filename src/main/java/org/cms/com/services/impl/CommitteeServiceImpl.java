@@ -25,6 +25,7 @@ public class CommitteeServiceImpl implements ICommitteeService {
         committee.setCommitteeType(request.getCommitteeType());
         committee.setMemberName(request.getMemberName());
         committee.setAffiliation(request.getAffiliation());
+        committee.setEmail(request.getEmail());
 
         if (request.getConferenceId() != null) {
             Conference conference = conferenceRepository.findById(request.getConferenceId())
@@ -44,6 +45,7 @@ public class CommitteeServiceImpl implements ICommitteeService {
         committee.setCommitteeType(request.getCommitteeType());
         committee.setMemberName(request.getMemberName());
         committee.setAffiliation(request.getAffiliation());
+        committee.setEmail(request.getEmail());
 
         if (request.getConferenceId() != null) {
             Conference conference = conferenceRepository.findById(request.getConferenceId())
@@ -91,6 +93,7 @@ public class CommitteeServiceImpl implements ICommitteeService {
         dto.setCommitteeType(committee.getCommitteeType());
         dto.setMemberName(committee.getMemberName());
         dto.setAffiliation(committee.getAffiliation());
+        dto.setEmail(committee.getEmail());
 
         if (committee.getConference() != null) {
             dto.setConferenceId(committee.getConference().getId());

@@ -12,5 +12,6 @@ public class CommitteeDto {
     private String committeeType;
     private String memberName;
     private String affiliation;
+    private String email;   // Üye e-posta adresi
 }
 

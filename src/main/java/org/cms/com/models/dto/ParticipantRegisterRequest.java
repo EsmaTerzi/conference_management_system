@@ -2,11 +2,13 @@ package org.cms.com.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParticipantRegisterRequest {

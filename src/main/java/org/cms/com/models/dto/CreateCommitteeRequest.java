@@ -11,6 +11,7 @@ public class CreateCommitteeRequest {
     private Long conferenceId;
     private String committeeType;   // BILIM / DUZENLEME / ORGANIZASYON
     private String memberName;
-    private String affiliation;     // Biruni Üniversitesi vb.
+    private String affiliation;
+    private String email;// Biruni Üniversitesi vb.
 }
 
