@@ -1,14 +1,8 @@
 package org.cms.com.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.cms.com.domain.Committee;
-import org.cms.com.domain.Conference;
-import org.cms.com.domain.DocumentStatus;
-import org.cms.com.domain.Participant;
-import org.cms.com.models.dto.AuthResponse;
-import org.cms.com.models.dto.ParticipantLoginRequest;
-import org.cms.com.models.dto.ParticipantRegisterRequest;
-import org.cms.com.models.dto.ProfileResponse;
+import org.cms.com.domain.*;
+import org.cms.com.models.dto.*;
 import org.cms.com.repositories.CommitteeRepository;
 import org.cms.com.repositories.ConferenceRepository;
 import org.cms.com.repositories.ParticipantRepository;
@@ -142,6 +136,22 @@ public class AuthParticipantServiceImpl implements IAuthParticipantService {
                 .password(participant.getPassword())
                 .documentStatus(participant.getDocumentStatus())
                 .build();
+    }
+
+
+    @Override
+    public void updatePassword(String email, UpdatePasswordRequest request) {
+        Participant participant = participantRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Mevcut şifreyi kontrol et
+        if (!passwordEncoder.matches(request.getCurrentPassword(), participant.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        // Yeni şifreyi encode et ve kaydet
+        participant.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        participantRepository.save(participant);
     }
 
 
