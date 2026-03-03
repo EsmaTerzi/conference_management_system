@@ -1,11 +1,8 @@
 package org.cms.com.models.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
+import org.cms.com.domain.TemplateType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +24,10 @@ public class CreateConferenceRequest {
     private String location;
     private String logoPath;
     private String coverPath;
+
+    // Template seçimi (CLASSIC veya MODERN)
+    private TemplateType templateType;
+
     private String footerOrganizationTitle;
     private String footerAddress;
     private String footerCityCountry;

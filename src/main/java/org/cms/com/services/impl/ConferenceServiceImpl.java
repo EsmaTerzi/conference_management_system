@@ -51,6 +51,11 @@ public class ConferenceServiceImpl implements IConferenceService {
         conference.setLogoPath(request.getLogoPath());
         conference.setCoverPath(request.getCoverPath());
 
+        // Template seçimi (null ise varsayılan CLASSIC olarak ayarlanır)
+        if (request.getTemplateType() != null) {
+            conference.setTemplateType(request.getTemplateType());
+        }
+
         // footer bilgileri
         conference.setFooterOrganizationTitle(request.getFooterOrganizationTitle());
         conference.setFooterAddress(request.getFooterAddress());
@@ -125,6 +130,11 @@ public class ConferenceServiceImpl implements IConferenceService {
         }
         if (request.getCoverPath() != null) {
             conference.setCoverPath(request.getCoverPath());
+        }
+
+        // Template seçimi güncelleme
+        if (request.getTemplateType() != null) {
+            conference.setTemplateType(request.getTemplateType());
         }
 
         // footer bilgileri - sadece null olmayanları güncelle
@@ -262,6 +272,9 @@ public class ConferenceServiceImpl implements IConferenceService {
         dto.setEndDate(conference.getEndDate());
         dto.setLogoPath(conference.getLogoPath());
         dto.setCoverPath(conference.getCoverPath());
+
+        // Template bilgisi
+        dto.setTemplateType(conference.getTemplateType());
 
         // owner bilgileri
         if (conference.getOwner() != null) {

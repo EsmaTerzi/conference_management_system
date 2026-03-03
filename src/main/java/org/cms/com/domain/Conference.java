@@ -41,6 +41,11 @@ public class Conference {
     @Column(name = "cover_path", length = 255)
     private String coverPath;
 
+    // Template seçimi (CLASSIC veya MODERN)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "template_type", length = 50, nullable = false)
+    private TemplateType templateType = TemplateType.CLASSIC; // Varsayılan olarak CLASSIC
+
     // konferansı oluşturan admin/person
     @ManyToOne
     @JoinColumn(name = "person_id")

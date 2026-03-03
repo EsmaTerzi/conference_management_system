@@ -6,7 +6,7 @@ import org.cms.com.models.dto.ParticipantRegisterRequest;
 import org.cms.com.models.dto.ProfileResponse;
 
 public interface IAuthParticipantService {
-    public AuthResponse registerParticipent(ParticipantRegisterRequest request);
-    public AuthResponse loginParticipent(ParticipantLoginRequest request);
+    public AuthResponse registerParticipant(ParticipantRegisterRequest request);
+    public AuthResponse loginParticipant(ParticipantLoginRequest request);
     public ProfileResponse getProfile(String email);
 }

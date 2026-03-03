@@ -2,6 +2,8 @@ package org.cms.com.models.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.cms.com.domain.TemplateType;
+
 import java.time.LocalDate;
 
 @Getter
@@ -17,6 +19,9 @@ public class ConferenceDto {
     private String location;
     private String logoPath;
     private String coverPath;
+
+    // Template seçimi (CLASSIC veya MODERN)
+    private TemplateType templateType;
 
     // Owner bilgileri
     private Long ownerId;
@@ -36,4 +41,3 @@ public class ConferenceDto {
 
 
 }
-
