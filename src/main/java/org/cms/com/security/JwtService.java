@@ -32,10 +32,6 @@ public class JwtService {
         return extractClaim(token, claims -> claims.get("userType", String.class));
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -45,10 +41,9 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public String generateTokenWithUserType(UserDetails userDetails, String userType) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userType", userType);
-        return buildToken(claims, userDetails, jwtExpiration);
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
     private String buildToken(
@@ -56,14 +51,19 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String generateTokenWithUserType(UserDetails userDetails, String userType) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userType", userType);
+        return buildToken(claims, userDetails, jwtExpiration);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

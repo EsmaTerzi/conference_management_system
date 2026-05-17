@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.cms.com.domain.Conference;
 import org.cms.com.domain.Person;
 import org.cms.com.domain.PersonConference;
+import org.cms.com.domain.Payment;
 import org.cms.com.models.dto.ConferenceDto;
 import org.cms.com.models.dto.CreateConferenceRequest;
+import org.cms.com.models.dto.PaymentDto;
 import org.cms.com.repositories.*;
 import org.cms.com.services.IConferenceService;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,7 @@ public class ConferenceServiceImpl implements IConferenceService {
     private final CommitteeRepository committeeRepository;
     private final ImportantDateRepository importantDateRepository;
     private final SponsorRepository sponsorRepository;
+    private final PaymentRepository paymentRepository; // eklendi
 
     @Override
     public ConferenceDto create(CreateConferenceRequest request) {
@@ -86,6 +89,19 @@ public class ConferenceServiceImpl implements IConferenceService {
                 sponsor.setConference(saved);
                 sponsorRepository.save(sponsor);
             });
+        }
+
+        // Payment kaydet (varsa)
+        if (hasPaymentInfo(request)) {
+            Payment payment = new Payment();
+            payment.setBankName(request.getPaymentBankName());
+            payment.setBankNameOptional(request.getPaymentBankNameOptional());
+            payment.setIban(request.getPaymentIban());
+            payment.setIbanOptional(request.getPaymentIbanOptional());
+            payment.setDocumentEmail(request.getPaymentDocumentEmail());
+            payment.setTextArea(request.getPaymentTextArea());
+            payment.setConference(saved);
+            paymentRepository.save(payment);
         }
 
         return toDto(saved);
@@ -186,6 +202,20 @@ public class ConferenceServiceImpl implements IConferenceService {
             });
         }
 
+        // Payment güncelle (varsa) - mevcut payment'ları sil ve yenisini ekle
+        if (hasPaymentInfo(request)) {
+            paymentRepository.deleteByConference_Id(id);
+            Payment payment = new Payment();
+            payment.setBankName(request.getPaymentBankName());
+            payment.setBankNameOptional(request.getPaymentBankNameOptional());
+            payment.setIban(request.getPaymentIban());
+            payment.setIbanOptional(request.getPaymentIbanOptional());
+            payment.setDocumentEmail(request.getPaymentDocumentEmail());
+            payment.setTextArea(request.getPaymentTextArea());
+            payment.setConference(conference);
+            paymentRepository.save(payment);
+        }
+
         // NOT: Owner değiştirilmez - güvenlik için
 
         Conference updated = conferenceRepository.save(conference);
@@ -238,7 +268,10 @@ public class ConferenceServiceImpl implements IConferenceService {
                 sponsorRepository.findByConference_Id(id)
         );
 
-        // 9. Son olarak Conference'ı sil
+        // 9. Payment'ları sil
+        paymentRepository.deleteByConference_Id(id);
+
+        // 10. Son olarak Conference'ı sil
         conferenceRepository.deleteById(id);
     }
 
@@ -295,6 +328,34 @@ public class ConferenceServiceImpl implements IConferenceService {
         dto.setFooterInstagramUrl(conference.getFooterInstagramUrl());
         dto.setFooterLinkedinUrl(conference.getFooterLinkedinUrl());
 
+        // payment bilgisi varsa al
+        List<Payment> payments = paymentRepository.findByConference_Id(conference.getId());
+        if (payments != null && !payments.isEmpty()) {
+            Payment payment = payments.get(0);
+            PaymentDto pDto = new PaymentDto();
+            pDto.setId(payment.getId());
+            pDto.setBankName(payment.getBankName());
+            pDto.setBankNameOptional(payment.getBankNameOptional());
+            pDto.setIban(payment.getIban());
+            pDto.setIbanOptional(payment.getIbanOptional());
+            pDto.setDocumentEmail(payment.getDocumentEmail());
+            pDto.setTextArea(payment.getTextArea());
+            dto.setPayment(pDto);
+        }
+
         return dto;
+    }
+
+    private boolean hasPaymentInfo(CreateConferenceRequest request) {
+        return hasText(request.getPaymentBankName())
+                || hasText(request.getPaymentBankNameOptional())
+                || hasText(request.getPaymentIban())
+                || hasText(request.getPaymentIbanOptional())
+                || hasText(request.getPaymentDocumentEmail())
+                || hasText(request.getPaymentTextArea());
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.isBlank();
     }
 }

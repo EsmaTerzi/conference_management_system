@@ -1,5 +1,6 @@
 package org.cms.com.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.cms.com.models.dto.ConferenceDto;
 import org.cms.com.models.dto.CreateConferenceRequest;
@@ -19,13 +20,13 @@ public class ConferenceController {
     private final IConferenceService IConferenceService;
 
     @PostMapping
-    public ResponseEntity<ConferenceDto> create(@RequestBody CreateConferenceRequest request) {
+    public ResponseEntity<ConferenceDto> create(@RequestBody @Valid CreateConferenceRequest request) {
         ConferenceDto created = IConferenceService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ConferenceDto> update(@PathVariable Long id, @RequestBody CreateConferenceRequest request) {
+    public ResponseEntity<ConferenceDto> update(@PathVariable Long id, @RequestBody @Valid CreateConferenceRequest request) {
         ConferenceDto updated = IConferenceService.update(id, request);
         return ResponseEntity.ok(updated);
     }

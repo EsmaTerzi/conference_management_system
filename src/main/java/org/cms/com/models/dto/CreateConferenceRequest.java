@@ -1,5 +1,8 @@
 package org.cms.com.models.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.cms.com.domain.TemplateType;
@@ -42,4 +45,24 @@ public class CreateConferenceRequest {
 
     // Sponsors
     private List<SponsorDto> sponsors;
+
+    // Payment bilgisi (isteğe bağlı) - conference oluştururken banka/iban/mail gibi bilgileri alır
+    @Size(max = 255)
+    private String paymentBankName;
+
+    @Size(max = 255)
+    private String paymentBankNameOptional;
+
+    @Pattern(regexp = "^[A-Z]{2}\\d{2}[A-Z0-9]{11,30}$", message = "IBAN format gecersiz")
+    private String paymentIban;
+
+    @Pattern(regexp = "^[A-Z]{2}\\d{2}[A-Z0-9]{11,30}$", message = "IBAN format gecersiz")
+    private String paymentIbanOptional;
+
+    @Email(message = "Email format gecersiz")
+    @Size(max = 255)
+    private String paymentDocumentEmail;
+
+    @Size(max = 5000)
+    private String paymentTextArea;
 }

@@ -39,5 +39,7 @@ public class ConferenceDto {
     private String footerInstagramUrl;
     private String footerLinkedinUrl;
 
+    // Payment bilgisi
+    private PaymentDto payment;
 
 }
