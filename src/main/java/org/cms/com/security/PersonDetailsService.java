@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cms.com.domain.Person;
 import org.cms.com.repositories.PersonRepository;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Primary
@@ -24,6 +26,6 @@ public class PersonDetailsService implements UserDetailsService {
         Person person = personRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         // Not: password alanınız "passwordHash" olarak isimlendirilmiş
-        return new User(person.getEmail(), person.getPasswordHash(), Collections.emptyList());
+        return new User(person.getEmail(), person.getPasswordHash(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
     }
 }
