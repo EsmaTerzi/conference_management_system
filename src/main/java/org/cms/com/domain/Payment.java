@@ -37,6 +37,9 @@ public class Payment {
     @Column(name = "text_area", columnDefinition = "TEXT")
     private String textArea;
 
+    @Column(name = "payment_fee_text", columnDefinition = "TEXT")
+    private String paymentFeeText;
+
     @ManyToOne
     @JoinColumn(name = "conference_id")
     private Conference conference;

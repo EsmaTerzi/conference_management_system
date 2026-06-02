@@ -31,4 +31,6 @@ public class PaymentDto {
 
     @Size(max = 5000)
     private String textArea;
+
+    private String paymentFeeText;
 }

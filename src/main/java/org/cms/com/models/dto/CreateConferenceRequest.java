@@ -65,4 +65,6 @@ public class CreateConferenceRequest {
 
     @Size(max = 5000)
     private String paymentTextArea;
+
+    private String paymentFeeText;
 }

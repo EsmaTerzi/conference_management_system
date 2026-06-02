@@ -100,6 +100,7 @@ public class ConferenceServiceImpl implements IConferenceService {
             payment.setIbanOptional(request.getPaymentIbanOptional());
             payment.setDocumentEmail(request.getPaymentDocumentEmail());
             payment.setTextArea(request.getPaymentTextArea());
+            payment.setPaymentFeeText(request.getPaymentFeeText());
             payment.setConference(saved);
             paymentRepository.save(payment);
         }
@@ -212,6 +213,7 @@ public class ConferenceServiceImpl implements IConferenceService {
             payment.setIbanOptional(request.getPaymentIbanOptional());
             payment.setDocumentEmail(request.getPaymentDocumentEmail());
             payment.setTextArea(request.getPaymentTextArea());
+            payment.setPaymentFeeText(request.getPaymentFeeText());
             payment.setConference(conference);
             paymentRepository.save(payment);
         }
@@ -340,6 +342,7 @@ public class ConferenceServiceImpl implements IConferenceService {
             pDto.setIbanOptional(payment.getIbanOptional());
             pDto.setDocumentEmail(payment.getDocumentEmail());
             pDto.setTextArea(payment.getTextArea());
+            pDto.setPaymentFeeText(payment.getPaymentFeeText());
             dto.setPayment(pDto);
         }
 
@@ -352,7 +355,8 @@ public class ConferenceServiceImpl implements IConferenceService {
                 || hasText(request.getPaymentIban())
                 || hasText(request.getPaymentIbanOptional())
                 || hasText(request.getPaymentDocumentEmail())
-                || hasText(request.getPaymentTextArea());
+                || hasText(request.getPaymentTextArea())
+                || hasText(request.getPaymentFeeText());
     }
 
     private boolean hasText(String value) {
