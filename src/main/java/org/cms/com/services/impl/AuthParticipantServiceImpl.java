@@ -111,6 +111,18 @@ public class AuthParticipantServiceImpl implements IAuthParticipantService {
         UserDetails userDetails = participantDetailsService.loadUserByUsername(participant.getEmail());
         String token = jwtService.generateToken(userDetails);
 
+        // Conference kaydı kontrolü
+        boolean isRegisteredToConference =
+                participantRepository.existsParticipantInConference(
+                        participant.getId(),
+                        request.getConferenceId()
+                );
+
+        if (!isRegisteredToConference) {
+            throw new RuntimeException("Participant is not registered to this conference");
+        }
+
+
         // Response oluştur
         AuthResponse response = new AuthResponse();
         response.setToken(token);

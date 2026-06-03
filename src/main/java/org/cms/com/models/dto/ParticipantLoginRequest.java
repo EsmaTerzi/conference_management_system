@@ -14,5 +14,6 @@ public class ParticipantLoginRequest {
         @NotEmpty(message = "Lütfen şifrenizi girin.")
         private String password;
 
+        private Long conferenceId;
 
 }
