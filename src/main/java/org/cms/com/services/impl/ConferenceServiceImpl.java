@@ -10,6 +10,7 @@ import org.cms.com.models.dto.CreateConferenceRequest;
 import org.cms.com.models.dto.PaymentDto;
 import org.cms.com.repositories.*;
 import org.cms.com.services.IConferenceService;
+import org.cms.com.services.IPaymentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,8 @@ public class ConferenceServiceImpl implements IConferenceService {
     private final CommitteeRepository committeeRepository;
     private final ImportantDateRepository importantDateRepository;
     private final SponsorRepository sponsorRepository;
-    private final PaymentRepository paymentRepository; // eklendi
+    private final PaymentRepository paymentRepository;
+    private final org.cms.com.services.IPaymentService paymentService;
 
     @Override
     public ConferenceDto create(CreateConferenceRequest request) {
@@ -93,16 +95,15 @@ public class ConferenceServiceImpl implements IConferenceService {
 
         // Payment kaydet (varsa)
         if (hasPaymentInfo(request)) {
-            Payment payment = new Payment();
-            payment.setBankName(request.getPaymentBankName());
-            payment.setBankNameOptional(request.getPaymentBankNameOptional());
-            payment.setIban(request.getPaymentIban());
-            payment.setIbanOptional(request.getPaymentIbanOptional());
-            payment.setDocumentEmail(request.getPaymentDocumentEmail());
-            payment.setTextArea(request.getPaymentTextArea());
-            payment.setPaymentFeeText(request.getPaymentFeeText());
-            payment.setConference(saved);
-            paymentRepository.save(payment);
+            PaymentDto pDto = new PaymentDto();
+            pDto.setBankName(request.getPaymentBankName());
+            pDto.setBankNameOptional(request.getPaymentBankNameOptional());
+            pDto.setIban(request.getPaymentIban());
+            pDto.setIbanOptional(request.getPaymentIbanOptional());
+            pDto.setDocumentEmail(request.getPaymentDocumentEmail());
+            pDto.setTextArea(request.getPaymentTextArea());
+            pDto.setPaymentFeeText(request.getPaymentFeeText());
+            paymentService.createOrUpdatePayment(saved.getId(), pDto);
         }
 
         return toDto(saved);
@@ -206,17 +207,15 @@ public class ConferenceServiceImpl implements IConferenceService {
 
         // Payment güncelle (varsa) - mevcut payment'ları sil ve yenisini ekle
         if (hasPaymentInfo(request)) {
-            paymentRepository.deleteByConference_Id(id);
-            Payment payment = new Payment();
-            payment.setBankName(request.getPaymentBankName());
-            payment.setBankNameOptional(request.getPaymentBankNameOptional());
-            payment.setIban(request.getPaymentIban());
-            payment.setIbanOptional(request.getPaymentIbanOptional());
-            payment.setDocumentEmail(request.getPaymentDocumentEmail());
-            payment.setTextArea(request.getPaymentTextArea());
-            payment.setPaymentFeeText(request.getPaymentFeeText());
-            payment.setConference(conference);
-            paymentRepository.save(payment);
+            PaymentDto pDto = new PaymentDto();
+            pDto.setBankName(request.getPaymentBankName());
+            pDto.setBankNameOptional(request.getPaymentBankNameOptional());
+            pDto.setIban(request.getPaymentIban());
+            pDto.setIbanOptional(request.getPaymentIbanOptional());
+            pDto.setDocumentEmail(request.getPaymentDocumentEmail());
+            pDto.setTextArea(request.getPaymentTextArea());
+            pDto.setPaymentFeeText(request.getPaymentFeeText());
+            paymentService.createOrUpdatePayment(id, pDto);
         }
 
         // NOT: Owner değiştirilmez - güvenlik için
@@ -272,7 +271,7 @@ public class ConferenceServiceImpl implements IConferenceService {
         );
 
         // 9. Payment'ları sil
-        paymentRepository.deleteByConference_Id(id);
+        paymentService.deletePaymentByConferenceId(id);
 
         // 10. Son olarak Conference'ı sil
         conferenceRepository.deleteById(id);
@@ -332,18 +331,8 @@ public class ConferenceServiceImpl implements IConferenceService {
         dto.setFooterLinkedinUrl(conference.getFooterLinkedinUrl());
 
         // payment bilgisi varsa al
-        List<Payment> payments = paymentRepository.findByConference_Id(conference.getId());
-        if (payments != null && !payments.isEmpty()) {
-            Payment payment = payments.get(0);
-            PaymentDto pDto = new PaymentDto();
-            pDto.setId(payment.getId());
-            pDto.setBankName(payment.getBankName());
-            pDto.setBankNameOptional(payment.getBankNameOptional());
-            pDto.setIban(payment.getIban());
-            pDto.setIbanOptional(payment.getIbanOptional());
-            pDto.setDocumentEmail(payment.getDocumentEmail());
-            pDto.setTextArea(payment.getTextArea());
-            pDto.setPaymentFeeText(payment.getPaymentFeeText());
+        PaymentDto pDto = paymentService.getPaymentByConferenceId(conference.getId());
+        if (pDto != null) {
             dto.setPayment(pDto);
         }
 
