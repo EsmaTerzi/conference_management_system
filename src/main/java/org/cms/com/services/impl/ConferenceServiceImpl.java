@@ -109,6 +109,7 @@ public class ConferenceServiceImpl implements IConferenceService {
     }
 
     @Override
+    @Transactional
     public ConferenceDto update(Long id, CreateConferenceRequest request) {
         Conference conference = conferenceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conference not found"));

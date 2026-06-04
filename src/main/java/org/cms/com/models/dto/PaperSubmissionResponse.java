@@ -24,5 +24,8 @@ public class PaperSubmissionResponse {
     private String adminNote;
     private Long participantId;
     private String participantName;
+
+    private Long conferenceId;
+    private String conferenceName;
 }
 

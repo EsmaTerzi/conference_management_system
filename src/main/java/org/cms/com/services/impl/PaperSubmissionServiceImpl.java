@@ -1,6 +1,7 @@
 package org.cms.com.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.cms.com.domain.Conference;
 import org.cms.com.domain.PaperSubmission;
 import org.cms.com.domain.PaperSubmissionStatus;
 import org.cms.com.domain.Participant;
@@ -85,6 +86,24 @@ public class PaperSubmissionServiceImpl implements IPaperSubmissionService {
     }
 
     private PaperSubmissionResponse mapToResponse(PaperSubmission paper) {
+
+        Long conferenceId = null;
+        String conferenceName = null;
+
+        if (paper.getParticipant() != null && paper.getParticipant().getConferences() != null) {
+
+            Conference conference = paper.getParticipant()
+                    .getConferences()
+                    .stream()
+                    .findFirst()
+                    .orElse(null);
+
+            if (conference != null) {
+                conferenceId = conference.getId();
+                conferenceName = conference.getConferenceName();
+            }
+        }
+
         return PaperSubmissionResponse.builder()
                 .id(paper.getId())
                 .title(paper.getTitle())
@@ -95,8 +114,14 @@ public class PaperSubmissionServiceImpl implements IPaperSubmissionService {
                 .submittedAt(paper.getSubmittedAt())
                 .reviewedAt(paper.getReviewedAt())
                 .adminNote(paper.getAdminNote())
-                .participantId(paper.getParticipant().getId())
-                .participantName(paper.getParticipant().getName() + " " + paper.getParticipant().getSurname())
+
+                .participantId(paper.getParticipant() != null ? paper.getParticipant().getId() : null)
+                .participantName(paper.getParticipant() != null
+                        ? paper.getParticipant().getName() + " " + paper.getParticipant().getSurname()
+                        : null)
+
+                .conferenceId(conferenceId)
+                .conferenceName(conferenceName)
                 .build();
     }
 }
